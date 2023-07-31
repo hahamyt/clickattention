@@ -1,0 +1,7 @@
+*.pth
+./experinments/
+./ckpts/
+.idea/
+__pycache__/
+*/__pycache__/
+*.pth

@@ -1,0 +1,39 @@
+INTERACTIVE_MODELS_PATH: "./experiments/iter_mask/cocolvis_hrnet18s/000_first-try/checkpoints/"
+EXPS_PATH: "./experiments"
+
+
+# Evaluation datasets
+GRABCUT_PATH: "/root/datasets/GrabCut"
+BERKELEY_PATH: "/root/datasets/Berkeley"
+DAVIS_PATH:  "/root/datasets/DAVIS"
+COCO_MVAL_PATH: "/root/datasets/COCO_MVal"
+PASCALVOC_PATH: "/root/datasets/VOCdevkit/VOC2012"
+DAVIS585_PATH: "/root/datasets/DAVIS585/data"
+DAVIS585_vis_PATH: "/root/datasets/DAVIS585_vis/data"
+LVIS_val_PATH: "/root/datasets/COCO_LVIS/val"
+
+# Train datasets
+SBD_PATH:  "/root/datasets/SBD_benchmark_RELEASE/dataset"
+LVIS_PATH: "/home/admin/workspace/project/data/datasets/COCO_LVIS"
+#LVIS_v1_PATH: "/root/datasets/COCO_LVIS"
+LVIS_v1_PATH: "/root/tmpdata/COCO_LVIS"
+OPENIMAGES_PATH: "/home/12312.123/data/dataset/OpenImage"
+ADE20K_PATH: "/home/admin/workspace/project/data/datasets/ADE20K"
+
+# Extra options for training
+THINOBJECT_PATH: "/home/admin/workspace/project/data/datasets/ThinObject/ThinObject5K"
+MSRA10K_PATH: "/home/admin/workspace/project/data/datasets/Saliency/MSRA10K_Imgs_GT/Imgs"
+DUT_TR_PATH: "/home/admin/workspace/project/data/datasets/Saliency/DUTS-TR/DUTS-TR-Image"
+DUT_TE_PATH: "/home/admin/workspace/project/data/datasets/Saliency/DUTS-TE/DUTS-TE-Image"
+YTBVOS_PATH: "/home/admin/workspace/project/data/datasets/YTBVOS"
+HFLICKER_PATH: "/home/admin/workspace/project/data/datasets/HFlickr"
+
+
+# You can download the weights for HRNet from the repository:
+# https://github.com/HRNet/HRNet-Image-Classification
+IMAGENET_PRETRAINED_MODELS:
+  SEGFORMER_B0: "./ckpts/Segformer/mit_b0.pth"
+#  SEGFORMER_B0: "./ckpts/mit_b0.pth"
+  SEGFORMER_B1: "/home/admin/workspace/project/data/weights/Segformer/mit_b1.pth"
+  SEGFORMER_B3: "./ckpts/Segformer/mit_b3.pth"
+  CL_VIT_HUGE: "./ckpts/cocolvis_icl_vit_huge.pth"
