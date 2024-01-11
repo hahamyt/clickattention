@@ -4,7 +4,7 @@
 
 ***30/July/2023***
 
-Interactive online demo is released🚀🚀. [DEMO](https://60674d461l.oicp.vip/demo/)
+Interactive online demo is released🚀🚀. [DEMO](http://www.img2latex.com)
 
 ***11/May/2023***
 
