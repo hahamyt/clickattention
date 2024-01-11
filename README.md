@@ -4,7 +4,7 @@
 
 ***30/July/2023***
 
-Interactive online demo is released🚀🚀. [DEMO](http://www.img2latex.com)
+Interactive online demo is released🚀🚀. [DEMO](http://img2latex.com)
 
 ***11/May/2023***
 
