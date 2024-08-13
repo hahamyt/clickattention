@@ -1,5 +1,10 @@
 # ClickAttention: Click Region Similarity Guided Interactive Segmentation
 
+## Submission Record
+
+[I will update the submission record here](SubmissionRecord.md)
+
+
 ## Updates
 
 ***30/July/2023***
