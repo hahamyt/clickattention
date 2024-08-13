@@ -1,5 +1,5 @@
 # ClickAttention: Click Region Similarity Guided Interactive Segmentation
-
+[![arXiv](https://img.shields.io/badge/arXiv-2408.06021-b31b1b.svg)](https://arxiv.org/abs/2408.06021)
 ## Submission Record
 
 [I will update the submission record here](SubmissionRecord.md)
