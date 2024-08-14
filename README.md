@@ -1,7 +1,7 @@
 # ClickAttention: Click Region Similarity Guided Interactive Segmentation
 [![arXiv](https://img.shields.io/badge/arXiv-2408.06021-b31b1b.svg)](https://arxiv.org/abs/2408.06021)
 
-Some missing files will be added soon.
+I've added the missing files. If there are any issues with the code, please let me know.
 
 ## Submission Record
 
