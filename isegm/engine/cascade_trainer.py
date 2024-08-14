@@ -99,7 +99,7 @@ class ISTrainer(object):
 
         self.optim = get_optimizer(model, optimizer, optimizer_params)
 
-        if self.model_cfg['use_pcgrad']:  # 是否使用PCGrad
+        if self.model_cfg['use_pcgrad']:
             # self.optim = PCGrad(2, self.optim, scaler=scaler, reduction='sum', cpu_offload= False)
             # For Gradient Vaccine
             self.optim = GradVacAMP(2, self.optim, torch.device('cuda:{}'.format(rank)), scaler=scaler,
@@ -174,7 +174,6 @@ class ISTrainer(object):
             self.optim.step()
             self.optim.zero_grad()
 
-            # 检查无梯度的参数
             # if self.is_master:
             #     for name, param in self.net.named_parameters():
             #         if param.grad is None:
@@ -187,7 +186,7 @@ class ISTrainer(object):
 
             if self.cfg['model_ema'] and i % self.cfg.model_ema_steps == 0:
                 self.ema_net.update_parameters(self.net)
-                if epoch < 2:  # 在2个EPOCH前去掉权重
+                if epoch < 2:  
                     # Reset ema buffer to keep copying weights during warmup period
                     self.ema_net.n_averaged.fill_(0)
 
@@ -211,7 +210,6 @@ class ISTrainer(object):
                 for metric in self.train_metrics:
                     metric.log_states(self.sw, f'{log_prefix}Metrics/{metric.name}', global_step)
 
-        # # 每个Epoch结束后
         # if 'search_param' in self.model_cfg.keys():
         #     tune.report(loss=(train_loss / (i + 1)), iou=self.train_metrics[0]._ema_iou)
 
@@ -287,7 +285,6 @@ class ISTrainer(object):
             prev_output = torch.zeros_like(image, dtype=torch.float32)[:, :1, :, :]
 
             if random.random() < 0.0001:
-                # 相当于重头开始点击，不从数据集中采样，特点就是只生成一次点击，对应的previous为空，符合实际情况
                 points[:] = -1
                 points = get_next_points_removeall(prev_output, gt_mask, points,1)
 
@@ -313,7 +310,6 @@ class ISTrainer(object):
                 prev_output = torch.sigmoid(output['instances']).detach()
                 if click_indx < num_iters - 1:
                     # points = get_next_points(prev_output,
-                    # 每次新增一个点
                     points = get_next_points_removeall(prev_output,
                                              gt_mask, points, click_indx+1)
 
@@ -417,16 +413,3 @@ def load_weights(model, path_to_weights):
     print('=' * 10)
     current_state_dict.update(new_state_dict)
     model.load_state_dict(current_state_dict, strict=False)
-'''
-Eval results for model: 047
--------------------------------------------------------------------------------------------------------------------
-|  Pipeline   |  Dataset  | NoC@80% | NoC@85% | NoC@90% | NoC@95% |>=20@85% |>=20@90% |>=20@95% | SPC,s |  Time   |
--------------------------------------------------------------------------------------------------------------------
-|  NoRefine   |   DAVIS   |  3.02   |  4.16   |  5.33   |  12.60  |   44    |   58    |   184   | 0.058 | 0:04:13 | NoC@95.0% = 12.60; >=20@95.0% = 1
-|  NoRefine   |  D585_SP  |  1.94   |  2.10   |  2.76   |  4.74   |   31    |   40    |   79    | 0.067 | 0:03:04 | NoC@95.0% = 4.74; >=20@95.0% = 79
-|  NoRefine   | D585_ZERO |  4.01   |  5.50   |  7.67   |  13.11  |   100   |   153   |   310   | 0.058 | 0:07:26 | NoC@95.0% = 13.11; >=20@95.0% = 310
-
-
-
-
-'''

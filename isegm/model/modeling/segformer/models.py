@@ -190,15 +190,15 @@ class AttnWeightBlock(nn.Module):
         for b_z in range(B):
             x_search = x_[b_z:b_z + 1, :, :]          # 1 x 64 x 1024
             x_b = x[b_z:b_z + 1, :, :]          # 1 x 1024 x 32
-            idx_pos = idxs[b_z, : n_p // 2][idxs[b_z, : n_p // 2] >= 0].contiguous().type(torch.long)   # 注意这里需要保证大于等于 0
+            idx_pos = idxs[b_z, : n_p // 2][idxs[b_z, : n_p // 2] >= 0].contiguous().type(torch.long)  
             pos_click_len.append(torch.tensor(len(idx_pos)).view(-1).to(x.device))
-            if len(idx_pos) <= 1:       # 点击次数小于等于一次
+            if len(idx_pos) <= 1:       
                 res.append(torch.ones(x.shape[1]).to(x.device)+ 0.0 * torch.sum(x_))
                 continue
 
             x_pos = x_b[:, idx_pos, :].mean(dim=1, keepdim=True)        # 1 x 1 x 32
             x_pos = self.mlp_z(x_pos, 1, 1).transpose(1, 2)
-            # 第一个参数维度： (1, 128, 4096),，第二个参数维度：（1, 128, 1）
+            
             res_pos = F.conv1d(x_search, x_pos)              # 1 x 1 x 4096
             res_pos = F.layer_norm(res_pos, normalized_shape=res_pos.shape)
             res_pos = F.sigmoid(res_pos)

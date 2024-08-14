@@ -110,7 +110,7 @@ class ISTrainer(object):
 
         self.optim = get_optimizer(model, optimizer, optimizer_params)
 
-        if self.model_cfg['use_pcgrad']:      # 是否使用PCGrad
+        if self.model_cfg['use_pcgrad']:      
             # self.optim = PCGrad(2, self.optim, scaler=scaler, reduction='sum', cpu_offload= False)
             # For Gradient Vaccine
             self.optim = GradVacAMP(2, self.optim, torch.device('cuda:{}'.format(rank)), scaler=scaler,
@@ -189,8 +189,8 @@ class ISTrainer(object):
                 self.optim.zero_grad()
                 with autocast():
                     loss, losses_logging, splitted_batch_data, outputs, refine_output = self.batch_forward(batch_data)
-                    scaler.scale(loss)  # 解决报错问题
-                if self.model_cfg['use_pcgrad']:  # 是否使用PCGrad
+                    scaler.scale(loss)
+                if self.model_cfg['use_pcgrad']: 
                     self.optim.backward(loss)
                     self.optim.step()
                 else:
@@ -200,13 +200,12 @@ class ISTrainer(object):
             else:
                 loss, losses_logging, splitted_batch_data, outputs, refine_output = self.batch_forward(batch_data)
                 self.optim.zero_grad()
-                if self.model_cfg['use_pcgrad']:  # 是否使用PCGrad
+                if self.model_cfg['use_pcgrad']:
                     self.optim.pc_backward(loss)
                 else:
                     loss.backward()
                 self.optim.step()
                 # torch.cuda.empty_cache()
-            # 检查无梯度的参数
             # if self.is_master:
             #     for name, param in self.net.named_parameters():
             #         if param.grad is None:
@@ -222,12 +221,11 @@ class ISTrainer(object):
 
             if self.cfg['model_ema'] and i % self.cfg.model_ema_steps == 0:
                 self.ema_net.update_parameters(self.net)
-                if epoch < 2:           # 在2个EPOCH前去掉权重
+                if epoch < 2:           
                     # Reset ema buffer to keep copying weights during warmup period
                     self.ema_net.n_averaged.fill_(0)
 
             # if i % 50 == 0 and ('search_param' in self.model_cfg.keys()):
-                # 每个Epoch结束后
                 # tune.report(loss=(train_loss / (i + 1)), iou=self.train_metrics[0]._ema_iou)
 
             if self.is_master:
@@ -251,7 +249,6 @@ class ISTrainer(object):
                 for metric in self.train_metrics:
                     metric.log_states(self.sw, f'{log_prefix}Metrics/{metric.name}', global_step)
 
-        # # 每个Epoch结束后
         # if 'search_param' in self.model_cfg.keys():
         #     tune.report(loss=(train_loss / (i + 1)), iou=self.train_metrics[0]._ema_iou)
 
@@ -350,11 +347,9 @@ class ISTrainer(object):
                     else:
                         eval_model = self.click_models[click_indx]
                     net_input = torch.cat((image, prev_output), dim=1) if self.model_cfg['with_prev_mask'] else image
-                    # 第一次进入模型，根据现有点击点计算prev_mask，不带梯度
                     first_output = eval_model(net_input, points)
                     prev_output = torch.sigmoid(first_output['instances'])
                     # viz.images(prev_output[:5, :, :, :], win='prev_output', opts={"title": 'prev_output'})
-                    # 添加至多三正三负个新的点击点
                     points, points_focus = get_next_points_removeall(prev_output, orig_gt_mask, points, points_focus, rois, click_indx + 1)
                     if not validation:
                         self.net.train()
@@ -369,7 +364,6 @@ class ISTrainer(object):
             batch_data['points_focus'] = points_focus
 
             net_input = torch.cat((image, prev_output), dim=1) if self.model_cfg['with_prev_mask'] else image
-            #第二次进入模型，输入上一次预测的mask，以及新的至多三个点击点
             output = self.net(net_input, points)
 
             # viz.images(output['instances'][:5, :, :, :], win='prev_output', opts={"title": 'prev_output'})

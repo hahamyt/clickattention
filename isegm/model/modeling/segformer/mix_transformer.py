@@ -165,8 +165,8 @@ class MixVisionTransformer(nn.Module):
         idxs_list = self.pt2patchidx(points, x.shape[2])
 
         outs = []
-        attns = []; attns_tmp = []         # 用于存放注意力响应，计算Affinity 损失
-        attnW = []                               # 用于存放特征权重
+        attns = []; attns_tmp = []         
+        attnW = []             
 
         # stage 1
         x, H, W = self.patch_embed1(x)         # B, 4096, 64
@@ -178,7 +178,7 @@ class MixVisionTransformer(nn.Module):
             x_dict = blk(x, H, W, weights, self.attn_weight[0])
             x = x_dict['x']
             attns_tmp.append(x_dict['attn'])
-        if self.attn_weight[0] and weights is not None:  # weights 为None的情形只在评估时会发生，因此不会影响训练
+        if self.attn_weight[0] and weights is not None:  
             attnW.append(weights.reshape(B, 1, W, W))
         x = self.norm1(x).reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
         outs.append(x)
@@ -192,7 +192,7 @@ class MixVisionTransformer(nn.Module):
             x_dict = blk(x, H, W, weights, self.attn_weight[1])
             x = x_dict['x']
             attns_tmp.append(x_dict['attn'])
-        if self.attn_weight[1] and weights is not None:  # weights 为None的情形只在评估时会发生，因此不会影响训练
+        if self.attn_weight[1] and weights is not None:  
             attnW.append(weights.reshape(B, 1, W, W))
         x = self.norm2(x).reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
         outs.append(x)
@@ -206,7 +206,7 @@ class MixVisionTransformer(nn.Module):
             x_dict = blk(x, H, W, weights, self.attn_weight[2])
             x = x_dict['x']
             attns_tmp.append(x_dict['attn'])
-        if self.attn_weight[2] and weights is not None:  # weights 为None的情形只在评估时会发生，因此不会影响训练
+        if self.attn_weight[2] and weights is not None:  
             attnW.append(weights.reshape(B, 1, W, W))
         x = self.norm3(x).reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
         outs.append(x)
@@ -222,7 +222,7 @@ class MixVisionTransformer(nn.Module):
             x_dict = blk(x, H, W, weights, self.attn_weight[3])
             x = x_dict['x']
             attns_tmp.append(x_dict['attn'])
-        if self.attn_weight[3] and weights is not None:  # weights 为None的情形只在评估时会发生，因此不会影响训练
+        if self.attn_weight[3] and weights is not None:  
             attnW.append(weights.reshape(B, 1, W, W))
         x = self.norm4(x).reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
         outs.append(x)

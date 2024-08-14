@@ -161,7 +161,7 @@ class ISTrainer(object):
                 self.optim.zero_grad()
                 with autocast():
                     loss, losses_logging, splitted_batch_data, outputs = self.batch_forward(batch_data)
-                    scaler.scale(loss)  # 解决报错问题
+                    scaler.scale(loss)
                     loss.backward()
                     scaler.step(self.optim)
                     scaler.update()
@@ -171,7 +171,6 @@ class ISTrainer(object):
                 loss.backward()
                 self.optim.step()
 
-            # 检查无梯度的参数
             # if self.is_master:
             #     for name, param in self.net.named_parameters():
             #         if param.grad is None:
@@ -184,7 +183,7 @@ class ISTrainer(object):
 
             if self.cfg['model_ema'] and i % self.cfg.model_ema_steps == 0:
                 self.ema_net.update_parameters(self.net)
-                if epoch < 2:  # 在2个EPOCH前去掉权重
+                if epoch < 2:  
                     # Reset ema buffer to keep copying weights during warmup period
                     self.ema_net.n_averaged.fill_(0)
 
@@ -282,11 +281,9 @@ class ISTrainer(object):
             loss = 0.0
 
             if random.random() < 0.02:
-                # 相当于重头开始点击，不从数据集中采样，特点就是只生成一次点击，对应的previous为空，符合实际情况
                 points[:] = -1
                 points = get_next_points(prev_output, gt_mask, points)
             else:
-                # 用于生成 previous mask 所需的迭代次数
                 if min(torch.sum(points[:, :24, 0] > 0, dim=1)) > 1:
                     num_iters = random.randint(1, self.max_num_next_clicks)
                 else:
@@ -302,7 +299,6 @@ class ISTrainer(object):
                 )
 
             net_input = torch.cat((image, prev_output), dim=1) if self.model_cfg['with_prev_mask'] else image
-            # 第二次进入模型，输入上一次预测的mask，以及新的至多三个点击点
             output = self.net(net_input, points)
 
             loss = self.add_loss('instance_loss', loss, losses_logging, validation,
