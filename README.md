@@ -110,8 +110,12 @@ We thank those authors for their great works.
 
 ## Citation
 
-TODO:
 ```
-
+@article{xu2024clickattention,
+  title={ClickAttention: Click Region Similarity Guided Interactive Segmentation},
+  author={Xu, Long and Li, Shanghong and Chen, Yongquan and Chen, Junkang and Huang, Rui and Wu, Feng},
+  journal={arXiv preprint arXiv:2408.06021},
+  year={2024}
+}
 ```
 
