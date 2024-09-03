@@ -7,12 +7,13 @@ I've added the missing files. If there are any issues with the code, please let 
 
 [I will update the submission record here](SubmissionRecord.md)
 
-
 ## Updates
 
 ***30/July/2023***
 
 Interactive online demo is released🚀🚀. [DEMO](http://img2latex.com)
+
+[![ClickAttention: Click Region Similarity Guided Interactive Segmentation](https://res.cloudinary.com/marcomontalbano/image/upload/v1725334594/video_to_markdown/images/youtube--iHKFl7A__Hs-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/iHKFl7A__Hs "ClickAttention: Click Region Similarity Guided Interactive Segmentation")
 
 ***11/May/2023***
 
