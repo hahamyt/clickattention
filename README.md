@@ -3,10 +3,6 @@
 
 I've added the missing files. If there are any issues with the code, please let me know.
 
-## Submission Record
-
-[I will update the submission record here](SubmissionRecord.md)
-
 ## Updates
 
 ***30/July/2023***
